@@ -1,4 +1,5 @@
 class ArticlesController<ApplicationController
+    before_action :set_article, only: [:update, :destroy]
 
     def create
         @article=Article.new
@@ -17,10 +18,6 @@ class ArticlesController<ApplicationController
     end
 
     def update
-        byebug
-        @article=Article.find(params[:id].to_i)
-        @article.name=params[:name]
-        @article.description=params[:description]
         if (@article.update(article_params))
             render json: {message: 'Updated successfully'}
         else
@@ -30,7 +27,6 @@ class ArticlesController<ApplicationController
     end
 
     def destroy
-        @article=Article.find(params[:id].to_i)
         if (@article.destroy)
             render json: {message: 'Deleted successfully'}
         else
@@ -43,6 +39,10 @@ class ArticlesController<ApplicationController
 
     def article_params
         params.require(:article).permit(:name,:description)
+    end
+
+    def set_article
+        @article=Article.find(params[:id].to_i)
     end
 
 end
